@@ -1,0 +1,42 @@
+:root {
+    --fondo: #0d1117;
+    --panel: #161b22;
+    --texto: #e6edf3;
+    --acento: #00ffcc;
+}
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: Consolas, monospace;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 { color: var(--acento); }
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input, select, textarea, button {
+    padding: 10px;
+    background: var(--panel);
+    color: var(--texto);
+    border: 1px solid var(--acento);
+}
+
+.entrada {
+    background: var(--panel);
+    padding: 15px;
+    margin-top: 10px;
+    border-left: 4px solid var(--acento);
+}
+

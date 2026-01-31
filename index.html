@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Diario Tecnológico</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🧪 Diario Tecnológico</h1>
+
+    <div class="controles">
+        <button onclick="cambiarTema('oscuro')">Tema Oscuro</button>
+        <button onclick="cambiarTema('neon')">Neón</button>
+        <button onclick="cambiarTema('claro')">Claro</button>
+    </div>
+
+    <form id="formulario">
+        <input type="text" id="titulo" placeholder="Título" required>
+
+        <select id="tipo">
+            <option value="Código">Código</option>
+            <option value="Dibujo">Dibujo</option>
+            <option value="Pensamiento">Pensamiento</option>
+        </select>
+
+        <textarea id="contenido" placeholder="Escribe aquí..." required></textarea>
+
+        <button type="submit">Guardar</button>
+    </form>
+
+    <hr>
+
+    <div id="entradas"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
