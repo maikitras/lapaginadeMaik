@@ -7,6 +7,24 @@ function guardarLocal() {
     localStorage.setItem("diario", JSON.stringify(entradas));
 }
 
+
+
+function setCookie(nombre, valor, dias) {
+
+    const fecha = new Date();
+
+    fecha.setTime(
+        fecha.getTime() + (dias * 24 * 60 * 60 * 1000)
+    );
+
+    const expiracion = "expires=" + fecha.toUTCString();
+
+    document.cookie =
+        nombre + "=" + valor + ";" +
+        expiracion + ";path=/";
+}
+
+
 function mostrarEntradas() {
     contenedor.innerHTML = "";
     entradas.forEach(e => {
