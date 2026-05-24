@@ -25,6 +25,24 @@ function setCookie(nombre, valor, dias) {
 }
 
 
+function getCookie(nombre) {
+
+    const n = nombre + "=";
+
+    const cookies = document.cookie.split(";");
+
+    for(let c of cookies) {
+
+        c = c.trim();
+
+        if(c.indexOf(n) === 0) {
+            return c.substring(n.length);
+        }
+    }
+
+    return "";
+}
+
 function mostrarEntradas() {
     contenedor.innerHTML = "";
     entradas.forEach(e => {
