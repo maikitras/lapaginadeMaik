@@ -1,3 +1,242 @@
+
+Claude finished the response
+1779889103730_image.png
+[maikitras/lapaginadeMaik: Un punto de confidencia entre mi mente y lo que sale de ella.](https://github.com/maikitras/lapaginadeMaik) esa es mi cuenta de git, el js const formulario = document.getElementById("formulario");
+const contenedor = document.getElementById("entradas");
+let entradas = JSON.parse(localStorage.getItem("diario")) || [];
+function guardarLocal() {
+    localStorage.setItem("diario", JSON.stringify(entradas));
+}
+function setCookie(nombre, valor, dias) {
+    const fecha = new Date();
+    fecha.setTime(
+        fecha.getTime() + (dias * 24 * 60 * 60 * 1000)
+    );
+    const expiracion = "expires=" + fecha.toUTCString();
+    document.cookie =
+        nombre + "=" + valor + ";" +
+        expiracion + ";path=/";
+}
+function getCookie(nombre) {
+    const n = nombre + "=";
+    const cookies = document.cookie.split(";");
+    for(let c of cookies) {
+        c = c.trim();
+        if(c.indexOf(n) === 0) {
+            return c.substring(n.length);
+        }
+    }
+    return "";
+}
+function mostrarEntradas() {
+    contenedor.innerHTML = "";
+    entradas.forEach(e => {
+        const div = document.createElement("div");
+        div.className = "entrada";
+        div.innerHTML = <h3>${e.titulo}</h3>
+                         <strong>${e.tipo}</strong>
+                         <pre>${e.contenido}</pre>;
+        contenedor.appendChild(div);
+    });
+}
+formulario.addEventListener("submit", e => {
+    e.preventDefault();
+    const entrada = {
+        titulo: document.getElementById("titulo").value,
+        tipo: document.getElementById("tipo").value,
+        contenido: document.getElementById("contenido").value
+    };
+    entradas.push(entrada);
+    guardarLocal();
+    mostrarEntradas();
+    formulario.reset();
+});
+function cambiarTema(tema) {
+    const root = document.documentElement;
+    if (tema === "oscuro") {
+        root.style.setProperty('--fondo', '
+#0d1117');
+        root.style.setProperty('--panel', '
+#161b22');
+        root.style.setProperty('--texto', '
+#e6edf3');
+        root.style.setProperty('--acento', '
+#00ffcc');
+    }
+    if (tema === "neon") {
+        root.style.setProperty('--fondo', '
+#050510');
+        root.style.setProperty('--panel', '
+#0d0d1a');
+        root.style.setProperty('--texto', '
+#ffffff');
+        root.style.setProperty('--acento', '
+#00bfff');
+    }
+    if (tema === "claro") {
+        root.style.setProperty('--fondo', '
+#f0f2f5');
+        root.style.setProperty('--panel', '
+#ffffff');
+        root.style.setProperty('--texto', '#111');
+        root.style.setProperty('--acento', '
+#007acc');
+    }
+}
+mostrarEntradas();  el css :root {
+    --fondo: 
+#0d1117;
+    --panel: 
+#161b22;
+    --texto: 
+#e6edf3;
+    --acento: 
+#00ffcc;
+}
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: Consolas, monospace;
+}
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+h1 { color: var(--acento); }
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+input, select, textarea, button {
+    padding: 10px;
+    background: var(--panel);
+    color: var(--texto);
+    border: 1px solid var(--acento);
+}
+.entrada {
+    background: var(--panel);
+    padding: 15px;
+    margin-top: 10px;
+    border-left: 4px solid var(--acento);
+} y el html <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Diario Tecnológico</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>🧪 Diario Tecnológico</h1>
+    <div class="controles">
+        <button onclick="cambiarTema('oscuro')">Tema Oscuro</button>
+        <button onclick="cambiarTema('neon')">Neón</button>
+        <button onclick="cambiarTema('claro')">Claro</button>
+    </div>
+    <form id="formulario">
+        <input type="text" id="titulo" placeholder="Título" required>
+        <select id="tipo">
+            <option value="Código">Código</option>
+            <option value="Dibujo">Dibujo</option>
+            <option value="Pensamiento">Pensamiento</option>
+        </select>
+        <textarea id="contenido" placeholder="Escribe aquí..." required></textarea>
+        <button type="submit">Guardar</button>
+    </form>
+    <text> HOLAAA</text> 
+    <hr>
+    <div id="entradas"></div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>. Lo que necesito es un reloj de ajedrez con un encabezado que diga bienvenidos jugadores de torneo de ajedrez de la biblioteca de la facultad multidisciplinaria oriental, el reloj que sea de 10 minuto por jugador pero la funcion que necesito es que no se apague la pantalla de los celulares o dispositivos por inactividad, el tema puede ser tal como la imagen adjunta pero adaptado para un dispopsitivo movil, en horizontal, una vez creado dame el codigo y explicame como he de implementarlo en la pagina, no importa el codigo que esta planeo eliminarlo solo implementa una peque;a firma digital que diga myke
+
+Show more
+7:40 a. m.
+
+Viewed a file, created a file, read a file
+Viewed a file, created a file, read a file
+Aquí tienes el reloj completo. Ahora la guía de implementación:
+
+Cómo implementarlo en tu repo lapaginadeMaik
+Paso 1 — Descarga el archivo
+Descarga el reloj-ajedrez.html que generé arriba.
+
+Paso 2 — Súbelo a tu repositorio
+Tienes dos opciones:
+
+A) Como página independiente (recomendado para este caso):
+
+lapaginadeMaik/
+├── index.html         ← tu diario (o elimínalo)
+├── reloj-ajedrez.html ← el nuevo archivo
+├── style.css
+└── script.js
+Súbelo con:
+
+bash
+git add reloj-ajedrez.html
+git commit -m "Agrega reloj de torneo de ajedrez"
+git push
+Quedará en: https://maikitras.github.io/lapaginadeMaik/reloj-ajedrez.html
+
+B) Reemplazar index.html si ya no quieres el diario:
+
+bash
+cp reloj-ajedrez.html index.html
+git add index.html
+git commit -m "Reemplaza diario con reloj de ajedrez"
+git push
+Cómo funciona el reloj
+Acción	Qué hace
+Toca el panel propio	Termina tu turno → arranca el reloj del rival
+Primer toque	Inicia el juego
+Pausar	Detiene ambos relojes
+Reiniciar	Vuelve a 10:00
+🟢 Verde = turno activo
+⚪ Claro = esperando
+🔴 Los últimos 30 segundos pulsan en rojo
+El Wake Lock API mantiene la pantalla encendida automáticamente (el puntito verde en el pie de página lo confirma)
+Firma myke en la esquina inferior derecha del footer
+Nota sobre Wake Lock: Funciona en Chrome/Edge para Android. En Safari/iOS requiere que el usuario tenga la pantalla activa manualmente (limitación del sistema iOS, no del código).
+
+
+Reloj ajedrez
+Code · HTML 
+perfecto pero agrega una funcion que permita modificar los minutos de cada jugador
+
+8:43 a. m.
+
+Edited 6 files, viewed a file, read a file
+Edited 6 files, viewed a file, read a file
+Listo. Aquí lo que se agregó:
+
+Botón ⚙ en el footer → abre un modal de configuración con:
+
+Controles − / + para cada jugador, de 1 a 99 minutos
+Checkbox "Sincronizar" (activo por defecto) — al mover el tiempo de Jugador 1 arrastra automáticamente al Jugador 2; desactívalo para tiempos distintos entre jugadores (útil si un árbitro necesita ajustar por penalización)
+Botón Aplicar — guarda los cambios y reinicia el reloj con los nuevos tiempos
+Botón Cancelar — cierra sin cambios
+El modal también pausa la partida automáticamente si estaba corriendo cuando se abre.
+
+
+Reloj ajedrez
+Code · HTML 
+
+You are out of free messages until 12:40 PM
+Keep working
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+
+
+raw
+Reloj ajedrez · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,7 +246,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto+Mono:wght@300;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
     :root {
       --green: #3aaa4a;
       --green-dark: #2d8a3a;
@@ -19,20 +258,20 @@
       --blue-bar: #3a5a8a;
       --gold: #d4a017;
     }
-
+ 
     html, body {
       height: 100%;
       overflow: hidden;
       background: #1a1d27;
     }
-
+ 
     body {
       display: flex;
       flex-direction: column;
       font-family: 'Oswald', sans-serif;
       touch-action: manipulation;
     }
-
+ 
     /* ── HEADER ── */
     header {
       background: #12151f;
@@ -45,12 +284,12 @@
       flex-shrink: 0;
       z-index: 10;
     }
-
+ 
     .chess-icon {
       font-size: 1.4rem;
       filter: drop-shadow(0 0 6px var(--gold));
     }
-
+ 
     header h1 {
       font-family: 'Oswald', sans-serif;
       font-size: clamp(0.55rem, 2.2vw, 0.9rem);
@@ -62,7 +301,7 @@
       text-align: center;
       text-shadow: 0 0 12px rgba(212,160,23,0.5);
     }
-
+ 
     /* ── MAIN CLOCK AREA ── */
     main {
       flex: 1;
@@ -71,7 +310,7 @@
       overflow: hidden;
       position: relative;
     }
-
+ 
     .panel {
       flex: 1;
       display: flex;
@@ -84,7 +323,7 @@
       position: relative;
       transition: background 0.25s ease;
     }
-
+ 
     /* ── PLAYER 1 (active = green) ── */
     .panel-1 {
       background: var(--green);
@@ -92,7 +331,7 @@
     .panel-1.inactive {
       background: var(--light-bg);
     }
-
+ 
     /* ── PLAYER 2 (inactive = light) ── */
     .panel-2 {
       background: var(--light-bg);
@@ -102,7 +341,7 @@
       background: var(--green);
       border-left: 2px solid var(--green-dark);
     }
-
+ 
     /* Tap ripple overlay */
     .panel::after {
       content: '';
@@ -114,12 +353,12 @@
       pointer-events: none;
     }
     .panel:active::after { opacity: 1; }
-
+ 
     /* Paused state overlay */
     .panel.paused-overlay {
       opacity: 0.75;
     }
-
+ 
     /* ── MOVE BADGE ── */
     .move-badge {
       position: absolute;
@@ -135,15 +374,15 @@
       font-weight: 700;
       backdrop-filter: blur(4px);
     }
-
+ 
     .panel-1 .move-badge { color: rgba(255,255,255,0.9); }
     .panel-1.inactive .move-badge { color: var(--dark-text); background: rgba(0,0,0,0.08); }
     .panel-2 .move-badge { color: var(--dark-text); background: rgba(0,0,0,0.08); }
     .panel-2.active .move-badge { color: rgba(255,255,255,0.9); background: rgba(0,0,0,0.18); }
-
+ 
     .move-icon { font-size: 1rem; }
     .move-count { font-family: 'Roboto Mono', monospace; letter-spacing: 0.05em; }
-
+ 
     /* ── TIME DISPLAY ── */
     .time {
       font-family: 'Roboto Mono', monospace;
@@ -153,19 +392,19 @@
       line-height: 1;
       transition: color 0.3s;
     }
-
+ 
     .panel-1 .time { color: var(--white); text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
     .panel-1.inactive .time { color: var(--dark-text); text-shadow: none; }
     .panel-2 .time { color: var(--dark-text); }
     .panel-2.active .time { color: var(--white); text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
-
+ 
     /* Time critical */
     .time.critical { color: #ff4444 !important; animation: pulse-red 0.6s infinite alternate; }
     @keyframes pulse-red {
       from { text-shadow: none; }
       to { text-shadow: 0 0 20px rgba(255,60,60,0.8); }
     }
-
+ 
     /* Progress bar */
     .progress-bar {
       width: 60%;
@@ -185,7 +424,7 @@
     .panel-1 .progress-bar { background: rgba(255,255,255,0.25); }
     .panel-1.inactive .progress-bar { background: rgba(0,0,0,0.15); }
     .panel-2.active .progress-bar { background: rgba(255,255,255,0.25); }
-
+ 
     /* ── FOOTER CONTROLS ── */
     footer {
       background: #12151f;
@@ -197,7 +436,7 @@
       gap: 14px;
       flex-shrink: 0;
     }
-
+ 
     .btn {
       display: flex;
       align-items: center;
@@ -215,21 +454,21 @@
       -webkit-tap-highlight-color: transparent;
     }
     .btn:active { transform: scale(0.95); }
-
+ 
     .btn-pause {
       background: #2a2d3a;
       color: #c0c4d0;
       border: 1px solid #3a3f52;
     }
     .btn-pause:hover { background: #32364a; }
-
+ 
     .btn-reset {
       background: transparent;
       color: #8890a8;
       border: 1px solid #2a2d3a;
     }
     .btn-reset:hover { color: #c0c4d0; border-color: #3a3f52; }
-
+ 
     /* ── SIGNATURE ── */
     .signature {
       position: absolute;
@@ -242,7 +481,7 @@
       pointer-events: none;
       user-select: none;
     }
-
+ 
     /* ── WAKELOCK STATUS dot ── */
     .wakelock-dot {
       width: 6px; height: 6px;
@@ -252,7 +491,173 @@
       flex-shrink: 0;
     }
     .wakelock-dot.off { background: #555; box-shadow: none; }
-
+ 
+    /* ── SETTINGS MODAL ── */
+    #settings-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,12,20,0.93);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0;
+      padding: 20px;
+    }
+    #settings-modal.show { display: flex; }
+ 
+    .settings-card {
+      background: #1e2535;
+      border: 1px solid #2e3448;
+      border-top: 3px solid var(--gold);
+      border-radius: 14px;
+      padding: 22px 24px 20px;
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+ 
+    .settings-card h3 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+    }
+ 
+    .settings-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+ 
+    .settings-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.78rem;
+      color: #8890a8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+ 
+    .time-picker {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: #12151f;
+      border: 1px solid #3a3f52;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+ 
+    .tp-btn {
+      width: 48px;
+      height: 48px;
+      background: #2a2d3a;
+      border: none;
+      color: #c0c4d0;
+      font-size: 1.4rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tp-btn:active { background: #3a3f52; }
+ 
+    .tp-display {
+      flex: 1;
+      text-align: center;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 48px;
+      letter-spacing: 0.05em;
+    }
+ 
+    .tp-unit {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.65rem;
+      color: #555c70;
+      text-align: center;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: -4px;
+    }
+ 
+    .tp-inner {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4px 0;
+    }
+ 
+    .settings-sync {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #12151f;
+      border: 1px solid #2a2d3a;
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .settings-sync input[type=checkbox] {
+      width: 18px; height: 18px;
+      accent-color: var(--gold);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .settings-sync span {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.75rem;
+      color: #8890a8;
+      line-height: 1.4;
+    }
+ 
+    .settings-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-cancel {
+      flex: 1;
+      padding: 11px;
+      background: transparent;
+      border: 1px solid #2a2d3a;
+      border-radius: 40px;
+      color: #8890a8;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .btn-apply {
+      flex: 2;
+      padding: 11px;
+      background: var(--gold);
+      border: none;
+      border-radius: 40px;
+      color: #12151f;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .btn-apply:active { opacity: 0.85; }
+ 
     /* ── GAME OVER OVERLAY ── */
     #game-over {
       display: none;
@@ -296,15 +701,15 @@
   </style>
 </head>
 <body>
-
+ 
   <header>
     <span class="chess-icon">♟</span>
     <h1>Bienvenidos jugadores — Torneo de Ajedrez<br>Biblioteca · Facultad Multidisciplinaria Oriental</h1>
     <span class="chess-icon">♟</span>
   </header>
-
+ 
   <main>
-
+ 
     <!-- PLAYER 1 -->
     <div class="panel panel-1" id="p1" onclick="tap(1)">
       <div class="move-badge">
@@ -314,7 +719,7 @@
       <div class="time" id="time1">10:00</div>
       <div class="progress-bar"><div class="progress-fill" id="bar1" style="width:100%"></div></div>
     </div>
-
+ 
     <!-- PLAYER 2 -->
     <div class="panel panel-2" id="p2" onclick="tap(2)">
       <div class="move-badge">
@@ -324,9 +729,9 @@
       <div class="time" id="time2">10:00</div>
       <div class="progress-bar"><div class="progress-fill" id="bar2" style="width:100%"></div></div>
     </div>
-
+ 
   </main>
-
+ 
   <footer>
     <div class="wakelock-dot" id="wl-dot" title="Pantalla activa"></div>
     <button class="btn btn-pause" id="pauseBtn" onclick="togglePause()">
@@ -335,28 +740,123 @@
     <button class="btn btn-reset" onclick="resetGame()">
       ↺ Reiniciar
     </button>
+    <button class="btn btn-reset" onclick="openSettings()" title="Configurar tiempo" style="padding:7px 14px;">
+      ⚙
+    </button>
     <div class="signature">myke</div>
   </footer>
-
+ 
+  <!-- SETTINGS MODAL -->
+  <div id="settings-modal">
+    <div class="settings-card">
+      <h3>⏱ Configurar Tiempos</h3>
+ 
+      <div class="settings-row">
+        <div class="settings-label">Jugador 1</div>
+        <div class="time-picker">
+          <button class="tp-btn" onclick="adjustTime(0, -1)">−</button>
+          <div class="tp-inner">
+            <div class="tp-display" id="cfg-min1">10</div>
+            <div class="tp-unit">minutos</div>
+          </div>
+          <button class="tp-btn" onclick="adjustTime(0, +1)">+</button>
+        </div>
+      </div>
+ 
+      <div class="settings-row">
+        <div class="settings-label">Jugador 2</div>
+        <div class="time-picker">
+          <button class="tp-btn" onclick="adjustTime(1, -1)">−</button>
+          <div class="tp-inner">
+            <div class="tp-display" id="cfg-min2">10</div>
+            <div class="tp-unit">minutos</div>
+          </div>
+          <button class="tp-btn" onclick="adjustTime(1, +1)">+</button>
+        </div>
+      </div>
+ 
+      <label class="settings-sync" id="sync-label">
+        <input type="checkbox" id="sync-check" checked onchange="syncToggle()">
+        <span>Sincronizar ambos jugadores con el mismo tiempo</span>
+      </label>
+ 
+      <div class="settings-actions">
+        <button class="btn-cancel" onclick="closeSettings()">Cancelar</button>
+        <button class="btn-apply" onclick="applySettings()">✔ Aplicar</button>
+      </div>
+    </div>
+  </div>
+ 
   <!-- GAME OVER -->
   <div id="game-over">
     <h2>⏰ Tiempo Agotado</h2>
     <p id="go-msg">El tiempo del jugador ha terminado.</p>
     <button class="btn-reset-big" onclick="resetGame()">↺ Nueva Partida</button>
   </div>
-
+ 
   <script>
-    // ── CONSTANTS
-    const TOTAL = 10 * 60; // 10 minutes in seconds
-
+    // ── CONSTANTS & CONFIG
+    let cfg = [10, 10]; // minutes per player
+    let totals = [600, 600]; // seconds per player
+ 
     // ── STATE
-    let times = [TOTAL, TOTAL];
+    let times = [...totals];
     let moves = [0, 0];
-    let active = null;   // 0 or 1 (index); null = not started
+    let active = null;
     let paused = true;
     let gameOver = false;
     let interval = null;
-
+ 
+    // ── SETTINGS
+    let cfgTemp = [10, 10];
+    let syncBoth = true;
+ 
+    function openSettings() {
+      if (!paused && active !== null) togglePause(); // auto-pause on open
+      cfgTemp = [...cfg];
+      syncBoth = document.getElementById('sync-check').checked;
+      document.getElementById('cfg-min1').textContent = cfgTemp[0];
+      document.getElementById('cfg-min2').textContent = cfgTemp[1];
+      document.getElementById('sync-check').checked = syncBoth;
+      document.getElementById('cfg-min2').closest('.settings-row').style.opacity = syncBoth ? '0.4' : '1';
+      document.getElementById('cfg-min2').closest('.settings-row').style.pointerEvents = syncBoth ? 'none' : 'auto';
+      document.getElementById('settings-modal').classList.add('show');
+    }
+ 
+    function closeSettings() {
+      document.getElementById('settings-modal').classList.remove('show');
+    }
+ 
+    function adjustTime(player, delta) {
+      if (syncBoth) {
+        cfgTemp[0] = Math.min(99, Math.max(1, cfgTemp[0] + delta));
+        cfgTemp[1] = cfgTemp[0];
+        document.getElementById('cfg-min1').textContent = cfgTemp[0];
+        document.getElementById('cfg-min2').textContent = cfgTemp[1];
+      } else {
+        cfgTemp[player] = Math.min(99, Math.max(1, cfgTemp[player] + delta));
+        document.getElementById(`cfg-min${player+1}`).textContent = cfgTemp[player];
+      }
+    }
+ 
+    function syncToggle() {
+      syncBoth = document.getElementById('sync-check').checked;
+      const row2 = document.getElementById('cfg-min2').closest('.settings-row');
+      row2.style.opacity = syncBoth ? '0.4' : '1';
+      row2.style.pointerEvents = syncBoth ? 'none' : 'auto';
+      if (syncBoth) {
+        cfgTemp[1] = cfgTemp[0];
+        document.getElementById('cfg-min2').textContent = cfgTemp[1];
+      }
+    }
+ 
+    function applySettings() {
+      cfg = [...cfgTemp];
+      totals = [cfg[0] * 60, cfg[1] * 60];
+      closeSettings();
+      resetGame();
+    }
+ 
     // ── WAKELOCK
     let wakeLock = null;
     async function requestWakeLock() {
@@ -380,41 +880,41 @@
         await requestWakeLock();
       }
     });
-
+ 
     // ── HELPERS
     function fmt(s) {
       const m = Math.floor(s / 60);
       const sec = s % 60;
       return `${m}:${sec.toString().padStart(2,'0')}`;
     }
-
+ 
     function render() {
       for (let i = 0; i < 2; i++) {
         const el = document.getElementById(`time${i+1}`);
         const bar = document.getElementById(`bar${i+1}`);
         el.textContent = fmt(times[i]);
-        bar.style.width = ((times[i] / TOTAL) * 100) + '%';
+        bar.style.width = ((times[i] / totals[i]) * 100) + '%';
         el.classList.toggle('critical', times[i] <= 30);
         document.getElementById(`moves${i+1}`).textContent = moves[i];
       }
-
+ 
       const p1 = document.getElementById('p1');
       const p2 = document.getElementById('p2');
-
+ 
       // reset classes
       p1.className = 'panel panel-1';
       p2.className = 'panel panel-2';
-
+ 
       if (active === 0) { p1.classList.remove('inactive'); p2.classList.remove('active'); p1.className = 'panel panel-1'; p2.className = 'panel panel-2'; }
       if (active === 1) { p1.classList.add('inactive'); p2.classList.add('active'); }
       if (active === null) { p1.classList.add('inactive'); } // pre-game: both light? or keep default
-
+ 
       if (paused && active !== null) {
         p1.classList.add('paused-overlay');
         p2.classList.add('paused-overlay');
       }
     }
-
+ 
     // ── TICK
     function tick() {
       if (paused || gameOver || active === null) return;
@@ -426,17 +926,17 @@
       }
       render();
     }
-
+ 
     function startInterval() {
       clearInterval(interval);
       interval = setInterval(tick, 1000);
     }
-
+ 
     // ── TAP a player panel
     function tap(player) {
       if (gameOver) return;
       const idx = player - 1;
-
+ 
       // First tap starts the game — whichever panel the opponent taps first
       // Convention: tap your own side AFTER you move → passes clock to opponent
       if (active === null) {
@@ -449,7 +949,7 @@
         render();
         return;
       }
-
+ 
       // If paused, unpause first
       if (paused) {
         paused = false;
@@ -458,24 +958,24 @@
         render();
         return;
       }
-
+ 
       // Only the active player can tap to pass turn
       if (idx !== active) return;
-
+ 
       moves[active]++;
       active = active === 0 ? 1 : 0;
       render();
     }
-
+ 
     // ── PAUSE / RESUME
     function togglePause() {
       if (gameOver) return;
       if (active === null) return; // not started yet
-
+ 
       paused = !paused;
       const icon = document.getElementById('pause-icon');
       const label = document.getElementById('pause-label');
-
+ 
       if (paused) {
         clearInterval(interval);
         releaseWakeLock();
@@ -489,7 +989,7 @@
       }
       render();
     }
-
+ 
     // ── GAME OVER
     function endGame(loserIdx) {
       gameOver = true;
@@ -502,12 +1002,12 @@
         `⚔️ ${loser} se quedó sin tiempo. ¡${winner} gana!`;
       document.getElementById('game-over').classList.add('show');
     }
-
+ 
     // ── RESET
     function resetGame() {
       clearInterval(interval);
       releaseWakeLock();
-      times = [TOTAL, TOTAL];
+      times = [...totals];
       moves = [0, 0];
       active = null;
       paused = true;
@@ -517,9 +1017,10 @@
       document.getElementById('game-over').classList.remove('show');
       render();
     }
-
+ 
     // ── INIT
     render();
   </script>
 </body>
 </html>
+ 
