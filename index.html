@@ -1,41 +1,525 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Diario Tecnológico</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Reloj de Torneo — Biblioteca FMO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto+Mono:wght@300;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #3aaa4a;
+      --green-dark: #2d8a3a;
+      --green-glow: rgba(58,170,74,0.35);
+      --light-bg: #eef0f4;
+      --light-panel: #f7f8fa;
+      --dark-text: #1e2535;
+      --white: #ffffff;
+      --blue-bar: #3a5a8a;
+      --gold: #d4a017;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #1a1d27;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      font-family: 'Oswald', sans-serif;
+      touch-action: manipulation;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: #12151f;
+      border-bottom: 2px solid var(--gold);
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .chess-icon {
+      font-size: 1.4rem;
+      filter: drop-shadow(0 0 6px var(--gold));
+    }
+
+    header h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(0.55rem, 2.2vw, 0.9rem);
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      line-height: 1.25;
+      text-align: center;
+      text-shadow: 0 0 12px rgba(212,160,23,0.5);
+    }
+
+    /* ── MAIN CLOCK AREA ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      transition: background 0.25s ease;
+    }
+
+    /* ── PLAYER 1 (active = green) ── */
+    .panel-1 {
+      background: var(--green);
+    }
+    .panel-1.inactive {
+      background: var(--light-bg);
+    }
+
+    /* ── PLAYER 2 (inactive = light) ── */
+    .panel-2 {
+      background: var(--light-bg);
+      border-left: 2px solid #ccd0d8;
+    }
+    .panel-2.active {
+      background: var(--green);
+      border-left: 2px solid var(--green-dark);
+    }
+
+    /* Tap ripple overlay */
+    .panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.12);
+      opacity: 0;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .panel:active::after { opacity: 1; }
+
+    /* Paused state overlay */
+    .panel.paused-overlay {
+      opacity: 0.75;
+    }
+
+    /* ── MOVE BADGE ── */
+    .move-badge {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      background: rgba(0,0,0,0.18);
+      border-radius: 20px;
+      padding: 3px 10px 3px 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      backdrop-filter: blur(4px);
+    }
+
+    .panel-1 .move-badge { color: rgba(255,255,255,0.9); }
+    .panel-1.inactive .move-badge { color: var(--dark-text); background: rgba(0,0,0,0.08); }
+    .panel-2 .move-badge { color: var(--dark-text); background: rgba(0,0,0,0.08); }
+    .panel-2.active .move-badge { color: rgba(255,255,255,0.9); background: rgba(0,0,0,0.18); }
+
+    .move-icon { font-size: 1rem; }
+    .move-count { font-family: 'Roboto Mono', monospace; letter-spacing: 0.05em; }
+
+    /* ── TIME DISPLAY ── */
+    .time {
+      font-family: 'Roboto Mono', monospace;
+      font-size: clamp(3.5rem, 14vw, 7rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      transition: color 0.3s;
+    }
+
+    .panel-1 .time { color: var(--white); text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+    .panel-1.inactive .time { color: var(--dark-text); text-shadow: none; }
+    .panel-2 .time { color: var(--dark-text); }
+    .panel-2.active .time { color: var(--white); text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+
+    /* Time critical */
+    .time.critical { color: #ff4444 !important; animation: pulse-red 0.6s infinite alternate; }
+    @keyframes pulse-red {
+      from { text-shadow: none; }
+      to { text-shadow: 0 0 20px rgba(255,60,60,0.8); }
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      width: 60%;
+      max-width: 220px;
+      height: 3px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 2px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--blue-bar);
+      border-radius: 2px;
+      transition: width 1s linear;
+    }
+    .panel-1 .progress-bar { background: rgba(255,255,255,0.25); }
+    .panel-1.inactive .progress-bar { background: rgba(0,0,0,0.15); }
+    .panel-2.active .progress-bar { background: rgba(255,255,255,0.25); }
+
+    /* ── FOOTER CONTROLS ── */
+    footer {
+      background: #12151f;
+      border-top: 1px solid #2a2d3a;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 20px;
+      border-radius: 40px;
+      border: none;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { transform: scale(0.95); }
+
+    .btn-pause {
+      background: #2a2d3a;
+      color: #c0c4d0;
+      border: 1px solid #3a3f52;
+    }
+    .btn-pause:hover { background: #32364a; }
+
+    .btn-reset {
+      background: transparent;
+      color: #8890a8;
+      border: 1px solid #2a2d3a;
+    }
+    .btn-reset:hover { color: #c0c4d0; border-color: #3a3f52; }
+
+    /* ── SIGNATURE ── */
+    .signature {
+      position: absolute;
+      bottom: 6px;
+      right: 10px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.5rem;
+      color: #3a3f52;
+      letter-spacing: 0.12em;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ── WAKELOCK STATUS dot ── */
+    .wakelock-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #3aaa4a;
+      box-shadow: 0 0 6px #3aaa4a;
+      flex-shrink: 0;
+    }
+    .wakelock-dot.off { background: #555; box-shadow: none; }
+
+    /* ── GAME OVER OVERLAY ── */
+    #game-over {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,12,20,0.92);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+    #game-over.show { display: flex; }
+    #game-over h2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2rem;
+      color: var(--gold);
+      text-align: center;
+      text-shadow: 0 0 20px rgba(212,160,23,0.6);
+    }
+    #game-over p {
+      font-family: 'Roboto Mono', monospace;
+      color: #8890a8;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    #game-over .btn-reset-big {
+      margin-top: 8px;
+      padding: 10px 32px;
+      background: var(--gold);
+      color: #12151f;
+      border-radius: 40px;
+      border: none;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🧪 Diario Tecnológico</h1>
+  <header>
+    <span class="chess-icon">♟</span>
+    <h1>Bienvenidos jugadores — Torneo de Ajedrez<br>Biblioteca · Facultad Multidisciplinaria Oriental</h1>
+    <span class="chess-icon">♟</span>
+  </header>
 
-    <div class="controles">
-        <button onclick="cambiarTema('oscuro')">Tema Oscuro</button>
-        <button onclick="cambiarTema('neon')">Neón</button>
-        <button onclick="cambiarTema('claro')">Claro</button>
+  <main>
+
+    <!-- PLAYER 1 -->
+    <div class="panel panel-1" id="p1" onclick="tap(1)">
+      <div class="move-badge">
+        <span class="move-icon">✏️</span>
+        <span class="move-count" id="moves1">0</span>
+      </div>
+      <div class="time" id="time1">10:00</div>
+      <div class="progress-bar"><div class="progress-fill" id="bar1" style="width:100%"></div></div>
     </div>
 
-    <form id="formulario">
-        <input type="text" id="titulo" placeholder="Título" required>
+    <!-- PLAYER 2 -->
+    <div class="panel panel-2" id="p2" onclick="tap(2)">
+      <div class="move-badge">
+        <span class="move-icon">✏️</span>
+        <span class="move-count" id="moves2">0</span>
+      </div>
+      <div class="time" id="time2">10:00</div>
+      <div class="progress-bar"><div class="progress-fill" id="bar2" style="width:100%"></div></div>
+    </div>
 
-        <select id="tipo">
-            <option value="Código">Código</option>
-            <option value="Dibujo">Dibujo</option>
-            <option value="Pensamiento">Pensamiento</option>
-        </select>
+  </main>
 
-        <textarea id="contenido" placeholder="Escribe aquí..." required></textarea>
+  <footer>
+    <div class="wakelock-dot" id="wl-dot" title="Pantalla activa"></div>
+    <button class="btn btn-pause" id="pauseBtn" onclick="togglePause()">
+      <span id="pause-icon">⏸</span> <span id="pause-label">Pausar</span>
+    </button>
+    <button class="btn btn-reset" onclick="resetGame()">
+      ↺ Reiniciar
+    </button>
+    <div class="signature">myke</div>
+  </footer>
 
-        <button type="submit">Guardar</button>
-    </form>
-    <text> HOLAAA</text> 
-    <hr>
+  <!-- GAME OVER -->
+  <div id="game-over">
+    <h2>⏰ Tiempo Agotado</h2>
+    <p id="go-msg">El tiempo del jugador ha terminado.</p>
+    <button class="btn-reset-big" onclick="resetGame()">↺ Nueva Partida</button>
+  </div>
 
-    <div id="entradas"></div>
-</div>
+  <script>
+    // ── CONSTANTS
+    const TOTAL = 10 * 60; // 10 minutes in seconds
 
-<script src="script.js"></script>
+    // ── STATE
+    let times = [TOTAL, TOTAL];
+    let moves = [0, 0];
+    let active = null;   // 0 or 1 (index); null = not started
+    let paused = true;
+    let gameOver = false;
+    let interval = null;
+
+    // ── WAKELOCK
+    let wakeLock = null;
+    async function requestWakeLock() {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await navigator.wakeLock.request('screen');
+          document.getElementById('wl-dot').classList.remove('off');
+          wakeLock.addEventListener('release', () => {
+            document.getElementById('wl-dot').classList.add('off');
+          });
+        }
+      } catch(e) { console.warn('WakeLock no disponible:', e); }
+    }
+    async function releaseWakeLock() {
+      if (wakeLock) { await wakeLock.release(); wakeLock = null; }
+      document.getElementById('wl-dot').classList.add('off');
+    }
+    // Re-acquire on visibility change (mobile browser rules)
+    document.addEventListener('visibilitychange', async () => {
+      if (document.visibilityState === 'visible' && !paused && !gameOver) {
+        await requestWakeLock();
+      }
+    });
+
+    // ── HELPERS
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return `${m}:${sec.toString().padStart(2,'0')}`;
+    }
+
+    function render() {
+      for (let i = 0; i < 2; i++) {
+        const el = document.getElementById(`time${i+1}`);
+        const bar = document.getElementById(`bar${i+1}`);
+        el.textContent = fmt(times[i]);
+        bar.style.width = ((times[i] / TOTAL) * 100) + '%';
+        el.classList.toggle('critical', times[i] <= 30);
+        document.getElementById(`moves${i+1}`).textContent = moves[i];
+      }
+
+      const p1 = document.getElementById('p1');
+      const p2 = document.getElementById('p2');
+
+      // reset classes
+      p1.className = 'panel panel-1';
+      p2.className = 'panel panel-2';
+
+      if (active === 0) { p1.classList.remove('inactive'); p2.classList.remove('active'); p1.className = 'panel panel-1'; p2.className = 'panel panel-2'; }
+      if (active === 1) { p1.classList.add('inactive'); p2.classList.add('active'); }
+      if (active === null) { p1.classList.add('inactive'); } // pre-game: both light? or keep default
+
+      if (paused && active !== null) {
+        p1.classList.add('paused-overlay');
+        p2.classList.add('paused-overlay');
+      }
+    }
+
+    // ── TICK
+    function tick() {
+      if (paused || gameOver || active === null) return;
+      if (times[active] > 0) {
+        times[active]--;
+      }
+      if (times[active] === 0) {
+        endGame(active);
+      }
+      render();
+    }
+
+    function startInterval() {
+      clearInterval(interval);
+      interval = setInterval(tick, 1000);
+    }
+
+    // ── TAP a player panel
+    function tap(player) {
+      if (gameOver) return;
+      const idx = player - 1;
+
+      // First tap starts the game — whichever panel the opponent taps first
+      // Convention: tap your own side AFTER you move → passes clock to opponent
+      if (active === null) {
+        // First tap: that player just moved, opponent's clock starts
+        active = idx === 0 ? 1 : 0;
+        moves[idx]++;
+        paused = false;
+        requestWakeLock();
+        startInterval();
+        render();
+        return;
+      }
+
+      // If paused, unpause first
+      if (paused) {
+        paused = false;
+        requestWakeLock();
+        startInterval();
+        render();
+        return;
+      }
+
+      // Only the active player can tap to pass turn
+      if (idx !== active) return;
+
+      moves[active]++;
+      active = active === 0 ? 1 : 0;
+      render();
+    }
+
+    // ── PAUSE / RESUME
+    function togglePause() {
+      if (gameOver) return;
+      if (active === null) return; // not started yet
+
+      paused = !paused;
+      const icon = document.getElementById('pause-icon');
+      const label = document.getElementById('pause-label');
+
+      if (paused) {
+        clearInterval(interval);
+        releaseWakeLock();
+        icon.textContent = '▶';
+        label.textContent = 'Reanudar';
+      } else {
+        requestWakeLock();
+        startInterval();
+        icon.textContent = '⏸';
+        label.textContent = 'Pausar';
+      }
+      render();
+    }
+
+    // ── GAME OVER
+    function endGame(loserIdx) {
+      gameOver = true;
+      paused = true;
+      clearInterval(interval);
+      releaseWakeLock();
+      const loser = loserIdx === 0 ? 'Jugador 1' : 'Jugador 2';
+      const winner = loserIdx === 0 ? 'Jugador 2' : 'Jugador 1';
+      document.getElementById('go-msg').textContent =
+        `⚔️ ${loser} se quedó sin tiempo. ¡${winner} gana!`;
+      document.getElementById('game-over').classList.add('show');
+    }
+
+    // ── RESET
+    function resetGame() {
+      clearInterval(interval);
+      releaseWakeLock();
+      times = [TOTAL, TOTAL];
+      moves = [0, 0];
+      active = null;
+      paused = true;
+      gameOver = false;
+      document.getElementById('pause-icon').textContent = '⏸';
+      document.getElementById('pause-label').textContent = 'Pausar';
+      document.getElementById('game-over').classList.remove('show');
+      render();
+    }
+
+    // ── INIT
+    render();
+  </script>
 </body>
 </html>
-
